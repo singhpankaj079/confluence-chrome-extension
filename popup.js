@@ -18,6 +18,7 @@ changeColor.addEventListener("click", async () => {
     });
     // console.log("after action");
 });
+
 async function x() {
     let [tab] = await chrome.tabs.query({active: true, currentWindow: true});
     chrome.scripting.executeScript({
@@ -29,9 +30,28 @@ async function x() {
 x();
 async function addOnSelect() {
     document.addEventListener('mouseup', event => {  
-        if(window.getSelection().toString().length){
+        let tooltip = document.getElementById("tooltip");
+        if (tooltip == null) {
+            tooltip = document.createElement('div');
+            tooltip.id = "tooltip";
+            tooltip.style.position = "absolute";
+            tooltip.style.zIndex = "100";
+            tooltip.style.background = "white";
+            tooltip.style.padding = "12px";
+            tooltip.style.minHeight = "300px";
+            tooltip.style.width = "300px";
+            tooltip.style.border = "1px solid black";
+            document.body.appendChild(tooltip);
+        }
+        if(window.getSelection().toString().length) {
            let exactText = window.getSelection().toString();        
-           alert(exactText);
+           tooltip.style.display = "block";
+           tooltip.innerText = exactText;  
+           tooltip.style.left = event.pageX + "px";
+            tooltip.style.top = event.pageY + "px";         
+            event.stopImmediatePropagation();
+        } else {
+            tooltip.style.display = "none";
         }
     });
 }
