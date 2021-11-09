@@ -11,7 +11,7 @@ def get_question(question):
     return jsonify(DefiniteQuery.read_question(_question=question))
 
 
-@app.route('/postQuestion', methods=['POST'])
+@app.route('/questions', methods=['POST'])
 def post_question():
     request_data = request.get_json()
     DefiniteQuery.create_question(_question=request_data["question"], _data=request_data["data"])
@@ -19,7 +19,7 @@ def post_question():
     return response
 
 
-@app.route('/questions/update', methods=['PUT'])
+@app.route('/questions', methods=['PUT'])
 def update_data():
     request_data = request.get_json()
     DefiniteQuery.update_question(_question=request_data["question"], _data=request_data['data'])
@@ -36,4 +36,4 @@ def remove_question(question):
 
 
 if __name__ == "__main__":
-    app.run(port=1234, debug=True)
+    app.run(port=1234, debug=False)
