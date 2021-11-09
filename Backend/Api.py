@@ -11,7 +11,7 @@ def get_question(question):
     return jsonify(DefiniteQuery.read_question(_question=question))
 
 
-@app.route('/postQuestion', methods=['POST'])
+@app.route('/questions', methods=['POST'])
 def post_question():
     request_data = request.get_json()
     DefiniteQuery.create_question(_question=request_data["question"], _data=request_data["data"])
