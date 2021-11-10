@@ -11,7 +11,6 @@ class DefiniteQuery(db.Model):
 
     @staticmethod
     def create_question(_question, _data):
-
         if _question.isspace() or _question is None or _data is None or _data.isspace():
 
             raise Exception("Invalid data")
@@ -41,11 +40,14 @@ class DefiniteQuery(db.Model):
 
     @staticmethod
     def read_question(_question):
+        _question = _question.strip()
         requiredQuery = DefiniteQuery.query.filter_by(question=_question).first()
         return {"data": requiredQuery.data}
 
     @staticmethod
     def update_question(_question, _data):
+        _question = _question.strip()
+        _data = _data.strip()
         query_to_update = DefiniteQuery.query.filter_by(question=_question).first()
         query_to_update.data = _data
         query_to_update.question = _question
@@ -53,12 +55,15 @@ class DefiniteQuery(db.Model):
 
     @staticmethod
     def delete_question(_question):
+        _question = _question.strip()
         DefiniteQuery.query.filter_by(question=_question).delete()
         db.session.commit()
 
     @staticmethod
 
     def delete_answer(_question, _data):
+        _question = _question.strip()
+        _data = _data.strip()
         if DefiniteQuery.query.filter_by(question=_question) is None:
             pass
 
