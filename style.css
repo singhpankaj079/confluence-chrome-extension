@@ -1,0 +1,27 @@
+#tooltip{
+    background-color:white;
+    position: absolute;
+    z-index: 100;
+    padding: 20px;
+    min-height: 300px;
+    min-width: 300px;
+    border: 3px solid purple;
+    color: black;
+    text-align: center;
+    border-radius: 5px;
+    max-width: 50vw;
+    max-height: 75vh;
+    overflow-y: scroll;
+    scrollbar-width: 15px;
+}
+
+hr{
+    color: black;
+    margin: 5px;
+    border: none;
+    border-top: 1px solid black;
+}
+
+
+
+
