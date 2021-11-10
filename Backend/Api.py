@@ -14,6 +14,8 @@ def get_question(question):
 @app.route('/questions', methods=['POST'])
 def post_question():
     request_data = request.get_json()
+    if (request_data is None):
+        return Response("Question Empty", 200, mimetype='application/json')
     DefiniteQuery.create_question(_question=request_data["question"], _data=request_data["data"])
     response = Response("Question added", 201, mimetype='application/json')
     return response

@@ -1,11 +1,19 @@
 // Initialize button with user's preferred color
 let changeColor = document.getElementById("changeColor");
-
+let addButton = document.getElementById("add");
 chrome.storage.sync.get("color", ({color}) => {
   console.log("color : " + color);
   changeColor.style.backgroundColor = color;
 });
 
+addButton.addEventListener("click", async () => {
+    let [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+    // console.log("before action");
+    let question = document.getElementById("question").value;
+    let data = document.getElementById("data").value;
+    addAnswer(question, data);
+    // console.log("after action");
+});
 changeColor.addEventListener("click", async () => {
     let [tab] = await chrome.tabs.query({active: true, currentWindow: true});
     // console.log("before action");
@@ -18,7 +26,22 @@ changeColor.addEventListener("click", async () => {
     });
     // console.log("after action");
 });
-
+function addAnswer(question, data) {
+    let payload = {"question": question, "data": data};
+    return fetch('http://localhost:1234/questions', {
+     
+    // Adding method type
+    method: "POST",
+     
+    // Adding body or contents to send
+    body: JSON.stringify(payload),
+     
+    // Adding headers to the request
+    headers: {
+        "Content-type": "application/json; charset=UTF-8", "Access-Control-Allow-Origin": "*",  "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+    }
+}).then(response => response.json());
+}
 // async function x() {
 //     let [tab] = await chrome.tabs.query({active: true, currentWindow: true});
 //     chrome.scripting.executeScript({

@@ -8,9 +8,31 @@
 // }
 
 // x();
-async function fetchAnswers(key) {
-    return fetch("http://127.0.0.1:1234/questions/" + key, {mode: "no-cors"});
+let options = {headers: {
+    "Access-Control-Allow-Origin": "*"
+    }};
+function fetchAnswers(key) {
+    return fetch('http://localhost:1234/questions/' + key, options).then(response => response.json());
+    // return fetch('http://localhost:1234/questions/' + key, {mode: "no-cors", headers: {'Accept': 'application/json','Content-Type': 'application/json'}});
 }
+
+function addAnswer(question, data) {
+    let payload = {"question": question, "data": data};
+    return fetch('http://localhost:1234/questions', {
+     
+    // Adding method type
+    method: "POST",
+     
+    // Adding body or contents to send
+    body: JSON.stringify(payload),
+     
+    // Adding headers to the request
+    headers: {
+        "Content-type": "application/json; charset=UTF-8", "Access-Control-Allow-Origin": "*",  "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+    }
+}).then(response => response.json());
+}
+
 
 function addOnSelect() {
     document.addEventListener('mouseup', event => {  
@@ -20,12 +42,14 @@ function addOnSelect() {
         }
 
         if(window.getSelection().toString().length) {
-           let exactText = window.getSelection().toString();
+           let exactText = window.getSelection().toString(); 
            fetchAnswers(exactText)
-           .then(res => {console.log(res); return res.json()})
-           .then(data => {updateTooltip(tooltip, exactText, data.questions, event.pageX, event.pageY); return data;})
-           .catch(err => console.log(err));
-        } else {
+           .then(json => {console.log(json); updateTooltip(tooltip, exactText, [json.data], event.pageX, event.pageY);});
+        }
+        //    .then(res => res.json()).then(data=>data).catch(err=>console.log(err));
+        //    .then(data => {console.log(data);updateTooltip(tooltip, exactText, JSON.parse(data).questions, event.pageX, event.pageY); return data;})
+        //    .catch(err => console.log(err));
+         else {
             tooltip.style.display = "none";
         }
     });
