@@ -11,11 +11,28 @@ class DefiniteQuery(db.Model):
 
     @staticmethod
     def create_question(_question, _data):
+
         if _question.isspace() or _question is None or _data is None or _data.isspace():
+
             raise Exception("Invalid data")
-        new_definite_query = DefiniteQuery(data=_data, question=_question)
-        db.session.add(new_definite_query)
-        db.session.commit()
+
+        if DefiniteQuery.query.filter_by(question=_question).first() is None:
+
+            new_definite_query = DefiniteQuery(data=_data, question=_question)
+
+            db.session.add(new_definite_query)
+
+            db.session.commit()
+
+        else:
+
+            query_to_update = DefiniteQuery.query.filter_by(question=_question).first()
+
+            query_to_update.data = query_to_update.data+"|#|"+_data
+
+            query_to_update.question = _question
+
+            db.session.commit()
 
     @staticmethod
     def read_all_questions():

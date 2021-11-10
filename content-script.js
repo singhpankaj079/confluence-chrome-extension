@@ -44,7 +44,7 @@ function addOnSelect() {
         if(window.getSelection().toString().length) {
            let exactText = window.getSelection().toString(); 
            fetchAnswers(exactText)
-           .then(json => {console.log(json); updateTooltip(tooltip, exactText, [json.data], event.pageX, event.pageY);});
+           .then(json => {console.log(json); updateTooltip(tooltip, exactText, json.data.split('|#|'), event.pageX, event.pageY);});
         }
         //    .then(res => res.json()).then(data=>data).catch(err=>console.log(err));
         //    .then(data => {console.log(data);updateTooltip(tooltip, exactText, JSON.parse(data).questions, event.pageX, event.pageY); return data;})
