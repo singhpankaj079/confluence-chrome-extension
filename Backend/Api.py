@@ -35,6 +35,12 @@ def remove_question(question):
     response = Response("Question Deleted", status=200, mimetype='application/json')
     return response
 
+@app.route('/questions/deleteAnswer',methods = ['POST'])
+def delete_answer():
+    request_data = request.get_json()
+    DefiniteQuery.delete_answer(_question=request_data["question"], _data=request_data['data'])
+    response = Response("Answer Deleted", status=200, mimetype='application/json')
+    return response
 
 if __name__ == "__main__":
     app.run(port=1234, debug=True)
