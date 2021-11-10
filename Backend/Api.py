@@ -1,5 +1,5 @@
 from DefiniteQuery import *
-
+#Dummy
 @app.route('/questions', methods=['GET'])
 def get_questions():
     return jsonify({'questions': DefiniteQuery.read_all_questions()})
