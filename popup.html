@@ -1,11 +1,16 @@
 <html>
   <head>
+    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="button.css">
   </head>
   <body>
-      <input name="question" id="question" type="text" placeholder="keyword" required></input>
-      <input name="data" id="data" type="text" placeholder="reference" required></input>
-      <button id="add">Add</button>
+    <div  class="animate__animated animate__lightSpeedInRight" style="padding:20px;">
+      <input name="question" id="question" type="text" placeholder="keyword" required class="mb-2"></input>
+      <input name="data" id="data" type="text" placeholder="reference" required class="mb-3"></input>
+      <button class="btn btn-success mx-4" id="add">Add</button>
+      <button id="delete" class="btn btn-danger">Delete</button>
+    </div>
     <script src="popup.js"></script>
   </body>
 </html>

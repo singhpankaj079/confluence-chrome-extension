@@ -57,10 +57,16 @@ function addOnSelect() {
 
 function updateTooltip(tooltip, selectedText, linkText, pageX, pageY) {
     tooltip.style.display = "block";
-    tooltip.innerText = selectedText;  
+    let h2 = document.createElement("h2");
+    h2.innerText = "Keyword:- " + selectedText;
+    h2.style.textAlign = "center";
+    h2.style.color = "purple";
+    tooltip.innerText = "";
+    tooltip.appendChild(h2);
     tooltip.style.left = pageX + "px";
     tooltip.style.top = pageY + "px";
     addLinksToTooltip(tooltip, linkText);
+    
 }
 
 function addLinksToTooltip(tooltip, linkText) {
@@ -69,7 +75,8 @@ function addLinksToTooltip(tooltip, linkText) {
         link.href = linkText[temp];
         link.appendChild(document.createTextNode(linkText[temp]));
         let divEle = document.createElement('div');
-        divEle.appendChild(link);                
+        divEle.appendChild(link);
+        link.appendChild(document.createElement("hr"));                
         tooltip.appendChild(divEle);
     }
 }
@@ -77,13 +84,8 @@ function addLinksToTooltip(tooltip, linkText) {
 function createTooltip() {
     let tooltip = document.createElement('div');
     tooltip.id = "tooltip";
-    tooltip.style.position = "absolute";
-    tooltip.style.zIndex = "100";
-    tooltip.style.background = "white";
-    tooltip.style.padding = "12px";
-    tooltip.style.minHeight = "300px";
-    tooltip.style.width = "300px";
-    tooltip.style.border = "1px solid black";
+    tooltip.className = "animate__animated animate__lightSpeedInRight";
+    // tooltip.classList.add(["animate__animated animate__bounce"]);
     tooltip.onclick = function(e) {
         e.stopImmediatePropagation();
     }
