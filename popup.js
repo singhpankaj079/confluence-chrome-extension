@@ -3,6 +3,7 @@ let changeColor = document.getElementById("changeColor");
 let addButton = document.getElementById("add");
 let deleteButton = document.getElementById("delete");
 let addFaqButton = document.getElementById("add-faq");
+let deleteFaqButton = document.getElementById("delete-faq");
 chrome.storage.sync.get("color", ({color}) => {
   console.log("color : " + color);
   changeColor.style.backgroundColor = color;
@@ -29,6 +30,13 @@ addFaqButton.addEventListener("click", async () => {
     let faq = document.getElementById("faq-question").value;
     let answer = document.getElementById("faq-answer").value;
     addFaq(question, faq, answer);
+    // console.log("after action");
+});
+deleteFaqButton.addEventListener("click", async () => {
+    // console.log("before action");
+    let question = document.getElementById("question2").value;
+    let faq = document.getElementById("faq-question").value;
+    deleteFaq(question, faq);
     // console.log("after action");
 });
 changeColor.addEventListener("click", async () => {
@@ -63,6 +71,23 @@ function addAnswer(question, data) {
 function addFaq(question, faq, answer) {
     let payload = {"question": question, "faq": faq, "new_answer": answer};
     return fetch('http://localhost:1234/questions/updateFAQ', {
+     
+    // Adding method type
+    method: "POST",
+     
+    // Adding body or contents to send
+    body: JSON.stringify(payload),
+     
+    // Adding headers to the request
+    headers: {
+        "Content-type": "application/json; charset=UTF-8", "Access-Control-Allow-Origin": "*",  "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+    }
+}).then(response => response.json());
+}
+
+function deleteFaq(question, faq) {
+    let payload = {"question": question, "faq": faq};
+    return fetch('http://localhost:1234/questions/deleteFAQ', {
      
     // Adding method type
     method: "POST",
