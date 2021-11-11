@@ -17,7 +17,7 @@ class DefiniteQuery(db.Model):
             raise Exception("Invalid data")
         _question = _question.strip()
         _data = _data.strip()
-        if DefiniteQuery.query.filter_by(question=_question).first() is None:
+        if DefiniteQuery.query.filter(func.lower(DefiniteQuery.question) == func.lower(_question)).first() is None:
 
             new_definite_query = DefiniteQuery(data=_data, question=_question)
 
@@ -27,7 +27,7 @@ class DefiniteQuery(db.Model):
 
         else:
 
-            query_to_update = DefiniteQuery.query.filter_by(question=_question).first()
+            query_to_update = DefiniteQuery.query.filter(func.lower(DefiniteQuery.question) == func.lower(_question)).first()
 
             query_to_update.data = query_to_update.data+"|#|"+_data
 
@@ -41,19 +41,20 @@ class DefiniteQuery(db.Model):
 
     @staticmethod
     def read_question(_question):
-        requiredQuery = DefiniteQuery.query.filter_by(question=_question).first()
+        requiredQuery = DefiniteQuery.query.filter(func.lower(DefiniteQuery.question) == func.lower(_question)).first()
         return {"data": requiredQuery.data}
 
     @staticmethod
     def update_question(_question, _data):
-        query_to_update = DefiniteQuery.query.filter_by(question=_question).first()
+        query_to_update = DefiniteQuery.query.filter(func.lower(DefiniteQuery.question) == func.lower(_question)).first()
         query_to_update.data = _data
         query_to_update.question = _question
         db.session.commit()
 
     @staticmethod
     def delete_question(_question):
-        DefiniteQuery.query.filter_by(question=_question).delete()
+        DefiniteQuery.query.filter(func.lower(DefiniteQuery.question) == func.lower(_question)).first().delete()
+        # DefiniteQuery.query.filter_by(question=_question).delete()
         db.session.commit()
 
     @staticmethod
