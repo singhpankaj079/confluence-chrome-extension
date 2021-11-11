@@ -11,7 +11,6 @@ class DefiniteQuery(db.Model):
 
     @staticmethod
     def create_question(_question, _data):
-
         if _question.isspace() or _question is None or _data is None or _data.isspace():
 
             raise Exception("Invalid data")
@@ -41,25 +40,43 @@ class DefiniteQuery(db.Model):
 
     @staticmethod
     def read_question(_question):
+<<<<<<< HEAD
         requiredQuery = DefiniteQuery.query.filter(func.lower(DefiniteQuery.question) == func.lower(_question)).first()
+=======
+        _question = _question.strip()
+        requiredQuery = DefiniteQuery.query.filter_by(question=_question).first()
+>>>>>>> b79e5f344ac4b5978c7abb8534c5aaedff0e86f7
         return {"data": requiredQuery.data}
 
     @staticmethod
     def update_question(_question, _data):
+<<<<<<< HEAD
         query_to_update = DefiniteQuery.query.filter(func.lower(DefiniteQuery.question) == func.lower(_question)).first()
+=======
+        _question = _question.strip()
+        _data = _data.strip()
+        query_to_update = DefiniteQuery.query.filter_by(question=_question).first()
+>>>>>>> b79e5f344ac4b5978c7abb8534c5aaedff0e86f7
         query_to_update.data = _data
         query_to_update.question = _question
         db.session.commit()
 
     @staticmethod
     def delete_question(_question):
+<<<<<<< HEAD
         DefiniteQuery.query.filter(func.lower(DefiniteQuery.question) == func.lower(_question)).first().delete()
         # DefiniteQuery.query.filter_by(question=_question).delete()
+=======
+        _question = _question.strip()
+        DefiniteQuery.query.filter_by(question=_question).delete()
+>>>>>>> b79e5f344ac4b5978c7abb8534c5aaedff0e86f7
         db.session.commit()
 
     @staticmethod
 
     def delete_answer(_question, _data):
+        _question = _question.strip()
+        _data = _data.strip()
         if DefiniteQuery.query.filter_by(question=_question) is None:
             pass
 
