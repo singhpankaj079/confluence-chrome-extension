@@ -94,24 +94,29 @@ class DefiniteQuery(db.Model):
         _question = _question.strip()
         _faq = _faq.strip()
         if DefiniteQuery.query.filter(func.lower(DefiniteQuery.question) == func.lower(_question)).first() is None:
-            pass
+            new_definite_query = DefiniteQuery(data="", question=_question)
 
-        else:
-            # query_to_update = DefiniteQuery.query.filter(func.lower(DefiniteQuery.question) == func.lower(_question)).first()
-            query_to_update = DefiniteQuery.query.filter(func.lower(DefiniteQuery.question) == func.lower(_question)).first()
-            allAnswers = query_to_update.data.split("|#|")
-
-            for idx,i in enumerate(allAnswers):
-                if(i.find('|##|')!=-1 ):
-                    faqFound = i.split('|##|')[0]
-                    if(faqFound.casefold()==_faq.casefold()):
-                        del allAnswers[idx]
-
-            query_to_update.data = ("|#|").join(allAnswers) + '|#|' +_faq + '|##|' + _new_answer
-
-            query_to_update.question = _question
+            db.session.add(new_definite_query)
 
             db.session.commit()
+    
+        # query_to_update = DefiniteQuery.query.filter(func.lower(DefiniteQuery.question) == func.lower(_question)).first()
+        query_to_update = DefiniteQuery.query.filter(func.lower(DefiniteQuery.question) == func.lower(_question)).first()
+        
+        allAnswers = query_to_update.data.split("|#|")
+       
+
+        for idx,i in enumerate(allAnswers):
+            if(i.find('|##|')!=-1 ):
+                faqFound = i.split('|##|')[0]
+                if(faqFound.casefold()==_faq.casefold()):
+                    del allAnswers[idx]
+
+        query_to_update.data = ("|#|").join(allAnswers) + '|#|' +_faq + '|##|' + _new_answer
+
+        query_to_update.question = _question
+
+        db.session.commit()
 
     @staticmethod
     def delete_faq(_question, _faq):
