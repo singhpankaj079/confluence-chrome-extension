@@ -42,5 +42,19 @@ def delete_answer():
     response = Response("Answer Deleted", status=200, mimetype='application/json')
     return response
 
+@app.route('/questions/updateFAQ',methods = ['POST'])
+def update_faq():
+    request_data = request.get_json()
+    DefiniteQuery.update_faq(_question=request_data["question"], _faq=request_data['faq'], _new_answer = request_data['new_answer'])
+    response = Response("Answer updated", status=200, mimetype='application/json')
+    return response
+
+@app.route('/questions/deleteFAQ',methods = ['POST'])
+def delete_faq():
+    request_data = request.get_json()
+    DefiniteQuery.delete_faq(_question=request_data["question"], _faq=request_data['faq'])
+    response = Response("Answer deleted", status=200, mimetype='application/json')
+    return response
+
 if __name__ == "__main__":
     app.run(port=1234, debug=True)
