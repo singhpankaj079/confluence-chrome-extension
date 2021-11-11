@@ -55,7 +55,7 @@ function addOnSelect() {
     });
 }
 
-function updateTooltip(tooltip, selectedText, linkText, pageX, pageY) {
+function updateTooltip(tooltip, selectedText, linkText, pageX, pageY) {    
     tooltip.style.display = "block";
     let h2 = document.createElement("h2");
     h2.innerText = "Keyword:- " + selectedText;
@@ -70,15 +70,38 @@ function updateTooltip(tooltip, selectedText, linkText, pageX, pageY) {
 }
 
 function addLinksToTooltip(tooltip, linkText) {
+    let divEle1 = document.createElement('div');
+    let divEle2 = document.createElement('div');
+    let h2 = document.createElement("h2");
+    h2.innerText = "Q & A";
+    divEle2.appendChild(h2);
+    console.log(linkText);
     for (var temp=0;temp<linkText.length;temp++) {
-        let link = document.createElement('a');
-        link.href = linkText[temp];
-        link.appendChild(document.createTextNode(linkText[temp]));
-        let divEle = document.createElement('div');
-        divEle.appendChild(link);
-        link.appendChild(document.createElement("hr"));                
-        tooltip.appendChild(divEle);
+        if (linkText[temp].indexOf("|##|") > -1) {
+            let [faq, answer] = linkText[temp].split("|##|");
+            let faqdiv = document.createElement('div');
+            faqdiv.innerText = faq;
+            let ansdiv = document.createElement('div');
+            ansdiv.innerText = answer;
+            let divEle = document.createElement('div');
+            divEle.appendChild(faqdiv);
+            divEle.appendChild(ansdiv);
+            divEle.appendChild(document.createElement("hr"));
+            divEle2.appendChild(divEle);
+        } else {
+            let link = document.createElement('a');
+            link.href = linkText[temp];
+            link.appendChild(document.createTextNode(linkText[temp]));
+            let divEle = document.createElement('div');
+            divEle.appendChild(link);
+            link.appendChild(document.createElement("hr"));                
+            divEle1.appendChild(divEle);
+        }
     }
+    divEle1.appendChild(document.createElement("br"));
+    console.log(divEle1);
+    tooltip.appendChild(divEle1);
+    tooltip.appendChild(divEle2);
 }
 
 function createTooltip() {

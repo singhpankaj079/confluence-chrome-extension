@@ -62,7 +62,7 @@ function addAnswer(question, data) {
 
 function addFaq(question, faq, answer) {
     let payload = {"question": question, "faq": faq, "new_answer": answer};
-    return fetch('http://localhost:1234/questions', {
+    return fetch('http://localhost:1234/questions/updateFAQ', {
      
     // Adding method type
     method: "POST",
