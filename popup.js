@@ -2,6 +2,7 @@
 let changeColor = document.getElementById("changeColor");
 let addButton = document.getElementById("add");
 let deleteButton = document.getElementById("delete");
+let addFaqButton = document.getElementById("add-faq");
 chrome.storage.sync.get("color", ({color}) => {
   console.log("color : " + color);
   changeColor.style.backgroundColor = color;
@@ -16,11 +17,18 @@ addButton.addEventListener("click", async () => {
     // console.log("after action");
 });
 deleteButton.addEventListener("click", async () => {
-    let [tab] = await chrome.tabs.query({active: true, currentWindow: true});
     // console.log("before action");
     let question = document.getElementById("question").value;
     let data = document.getElementById("data").value;
     deleteAnswer(question, data);
+    // console.log("after action");
+});
+addFaqButton.addEventListener("click", async () => {
+    // console.log("before action");
+    let question = document.getElementById("question2").value;
+    let faq = document.getElementById("faq-question").value;
+    let answer = document.getElementById("faq-answer").value;
+    addFaq(question, faq, answer);
     // console.log("after action");
 });
 changeColor.addEventListener("click", async () => {
@@ -37,6 +45,23 @@ changeColor.addEventListener("click", async () => {
 });
 function addAnswer(question, data) {
     let payload = {"question": question, "data": data};
+    return fetch('http://localhost:1234/questions', {
+     
+    // Adding method type
+    method: "POST",
+     
+    // Adding body or contents to send
+    body: JSON.stringify(payload),
+     
+    // Adding headers to the request
+    headers: {
+        "Content-type": "application/json; charset=UTF-8", "Access-Control-Allow-Origin": "*",  "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+    }
+}).then(response => response.json());
+}
+
+function addFaq(question, faq, answer) {
+    let payload = {"question": question, "faq": faq, "new_answer": answer};
     return fetch('http://localhost:1234/questions', {
      
     // Adding method type
