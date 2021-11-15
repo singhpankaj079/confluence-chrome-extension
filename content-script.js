@@ -8,6 +8,7 @@
 // }
 
 // x();
+let tooltipId = "__tooltip__";
 let options = {headers: {
     "Access-Control-Allow-Origin": "*"
     }};
@@ -36,13 +37,13 @@ function addAnswer(question, data) {
 
 function addOnSelect() {
     document.addEventListener('mouseup', event => {  
-        let tooltip = document.getElementById("tooltip");
+        let tooltip = document.getElementById(tooltipId);
         if (tooltip == null) {
             tooltip = createTooltip();
         }
 
         if(window.getSelection().toString().length) {
-           let exactText = window.getSelection().toString(); 
+           let exactText = window.getSelection().toString();
            fetchAnswers(exactText)
            .then(json => {console.log(json); updateTooltip(tooltip, exactText, json.data.split('|#|'), event.pageX, event.pageY);});
         }
@@ -56,7 +57,6 @@ function addOnSelect() {
 }
 
 function updateTooltip(tooltip, selectedText, linkText, pageX, pageY) {    
-    tooltip.style.display = "block";
     let h2 = document.createElement("h2");
     h2.innerText = "Keyword:- " + selectedText;
     h2.style.textAlign = "center";
@@ -66,6 +66,7 @@ function updateTooltip(tooltip, selectedText, linkText, pageX, pageY) {
     tooltip.style.left = pageX + "px";
     tooltip.style.top = pageY + "px";
     addLinksToTooltip(tooltip, linkText);
+    tooltip.style.display = "block";
     
 }
 
@@ -106,7 +107,8 @@ function addLinksToTooltip(tooltip, linkText) {
 
 function createTooltip() {
     let tooltip = document.createElement('div');
-    tooltip.id = "tooltip";
+    tooltip.id = tooltipId;
+    tooltip.style.display = "none";
     tooltip.className = "animate__animated animate__lightSpeedInRight";
     // tooltip.classList.add(["animate__animated animate__bounce"]);
     tooltip.onclick = function(e) {
