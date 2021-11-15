@@ -13,7 +13,7 @@ let options = {headers: {
     "Access-Control-Allow-Origin": "*"
     }};
 function fetchAnswers(key) {
-    return fetch('http://localhost:1234/questions/' + key, options).then(response => response.json());
+    return fetch('http://localhost:1234/questions/' + key, options).then(response => response.json()).catch(err=> console.log(err));
     // return fetch('http://localhost:1234/questions/' + key, {mode: "no-cors", headers: {'Accept': 'application/json','Content-Type': 'application/json'}});
 }
 
