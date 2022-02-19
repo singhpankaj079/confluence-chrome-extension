@@ -6,7 +6,7 @@ let addFaqButton = document.getElementById("add-faq");
 let deleteFaqButton = document.getElementById("delete-faq");
 chrome.storage.sync.get("color", ({color}) => {
   console.log("color : " + color);
-  changeColor.style.backgroundColor = color;
+//   changeColor.style.backgroundColor = color;
 });
 
 addButton.addEventListener("click", async () => {
@@ -39,18 +39,18 @@ deleteFaqButton.addEventListener("click", async () => {
     deleteFaq(question, faq);
     // console.log("after action");
 });
-changeColor.addEventListener("click", async () => {
-    let [tab] = await chrome.tabs.query({active: true, currentWindow: true});
-    // console.log("before action");
-    let color = document.getElementById("exinput").value;
-    console.log(color);
-    chrome.scripting.executeScript({
-        target: {tabId: tab.id},
-        function: setPageBackgroundColor,
-        args: [color],
-    });
-    // console.log("after action");
-});
+// changeColor.addEventListener("click", async () => {
+//     let [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+//     // console.log("before action");
+//     let color = document.getElementById("exinput").value;
+//     console.log(color);
+//     chrome.scripting.executeScript({
+//         target: {tabId: tab.id},
+//         function: setPageBackgroundColor,
+//         args: [color],
+//     });
+//     // console.log("after action");
+// });
 function addAnswer(question, data) {
     let payload = {"question": question, "data": data};
     return fetch('http://localhost:1234/questions', {

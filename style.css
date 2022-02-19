@@ -14,7 +14,40 @@
     overflow: auto;
 }
 
-hr{
+.ext_delete_button {
+    color: red;
+    position: relative;
+    top: 2px;
+    margin-right: 5px;
+    float: right;
+}
+
+.ext_edit_button {
+    position: relative;
+    top: 2px;
+    margin-right: 5px;
+    float: right;
+}
+
+.ext_edit_cancel {
+    color: red;
+    position: relative;
+    top: 2px;
+    margin-right: 5px;
+    float: right;
+}
+
+.ext_edit_submit {
+    color: green;
+    position: relative;
+    top: 2px;
+    margin-right: 5px;
+    float: right;
+}
+.ext_display_none {
+    display: none;
+}
+hr {
     color: black;
     margin: 5px;
     border: none;

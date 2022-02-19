@@ -6,12 +6,12 @@
     "background": {
         "service_worker": "background.js"
     },
-    "permissions": ["storage", "activeTab", "scripting"],
+    "permissions": ["storage", "activeTab", "scripting", "contextMenus"],
     "action": {
         "default_popup": "popup.html"
     },
     "content_scripts": [{
-        "matches": ["https://*.com/*"],
+        "matches": ["https://*.google.com/*", "https://google.com/*"],
         "js": ["content-script.js"],
         "css":["style.css", "animate.css"]
     }]

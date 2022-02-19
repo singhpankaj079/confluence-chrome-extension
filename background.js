@@ -5,4 +5,14 @@ chrome.runtime.onInstalled.addListener(() => {
     console.log('Default color set to green');
 });
 
+// chrome.contextMenus.create({
+//     "title": "show references",
+//     "onclick": function() {
+//         console.log("not added")
+//     },
+//     "contexts": ["selection"] 
+// })
+
+
+
 
