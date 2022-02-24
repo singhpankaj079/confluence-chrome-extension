@@ -58,7 +58,7 @@ function actionOnSelect(event) {
 
 function updateTooltip(tooltip, selectedText, keywordData, pageX, pageY) {    
     let h2 = document.createElement("h2");
-    h2.innerHTML = selectedText + '<span id="' + selectedText + '_show_add_ref_form" class="glyphicon glyphicon-plus ext_show_add_reference_form"></span>';
+    h2.innerHTML = selectedText + '<span id="' + selectedText + '_show_add_ref_form_button" title="Add reference" class="glyphicon glyphicon-plus ext_show_add_ref_form_button"></span>';
     h2.style.textAlign = "center";
     h2.style.color = "purple";
     tooltip.innerText = "";
@@ -66,17 +66,11 @@ function updateTooltip(tooltip, selectedText, keywordData, pageX, pageY) {
     if (pageX) tooltip.style.left = pageX + "px";
     if (pageY) tooltip.style.top = pageY + "px";
     addLinksToTooltip(tooltip, keywordData, selectedText);
-    document.getElementById(selectedText + "_show_add_ref_form").onclick = () => showAddRefForm(selectedText);
+    document.getElementById(selectedText + "_show_add_ref_form_button").onclick = () => showAddRefForm(selectedText);
     tooltip.style.display = "block";
     
 }
 
-function showAddRefForm(keyword) {
-    let addRefForm = document.getElementById(keyword + "_add_ref_form");
-    if (addRefForm && addRefForm.classList.contains(["ext_display_none"])) {
-        addRefForm.classList.remove(["ext_display_none"]);
-    }
-}
 function refreshTooltip(keyword) {
     let tooltip = document.getElementById(tooltipId);
     if (tooltip == null) {
@@ -95,7 +89,7 @@ function addLinksToTooltip(tooltip, keywordData, keyword) {
     if (keywordData) {
         let referencelist = keywordData.referencelist;
         let qalist = keywordData.questionAnswer;
-        divEle1.innerHTML += '<div id="' + keyword + '_add_ref_form" class="ext_display_none"><input type="text" name="keyword" value="' + keywordData.keyword.toLowerCase() + '" class="ext_display_none"><input type="text" placeholder="url" name="url"><input type="text" placeholder="description" name="description"><button id="ext_addRefButton">Add</button>';
+        divEle1.innerHTML += '<div id="' + keyword + '_add_ref_form" class="ext_display_none"><input type="text" name="keyword" value="' + keywordData.keyword.toLowerCase() + '" class="ext_display_none"><input id="' + keyword +'_add_ref_desc_input" type="text" placeholder="description" name="description"><input id="' + keyword + '_add_ref_url_input" type="text" placeholder="url" name="url"><span id="' + keyword + '_cancel_add_ref_button" class="glyphicon glyphicon-remove ext_cancel_add_ref_button"></span><span id="' + keyword + '_add_ref_button" class="glyphicon glyphicon-ok ext_add_ref_button"></span>';
         divEle1.innerHTML += '<br>'
         for (let temp=0;referencelist && temp<referencelist.length;temp++) {
             let divEle1html = '<div  id="' + keyword + '_ref_refId_' + temp + '" class="ext_display_none">' + referencelist[temp]._id + '</div><div id="' + keyword + '_ref_item_' + temp + '">' + referencelist[temp].description + ': <a href="' + referencelist[temp].url + '">' + referencelist[temp].url + '</a><span id="' + keyword + '_ref_delete_button_' + temp + '" class="glyphicon glyphicon-remove-circle ext_delete_button"></span><span id="' + keyword + '_ref_edit_button_' + temp + '" class="glyphicon glyphicon-pencil ext_edit_button"></span></div><br>';
@@ -112,27 +106,53 @@ function addLinksToTooltip(tooltip, keywordData, keyword) {
             document.getElementById(keyword + "_ref_edit_button_" + temp).onclick = () =>  openEditForm(keyword, temp, referencelist[temp]);
             document.getElementById(keyword + "_ref_edit_cancel_button_" + temp).onclick = () => hideEditForm(keyword, temp);
             document.getElementById(keyword + "_ref_edit_submit_button_" + temp).onclick = () => editReference(keyword, temp);
-            document.getElementById(keyword + "_ref_delete_button_" + temp).onclick = () => deleteReference(keyword, temp);               
+            document.getElementById(keyword + "_ref_delete_button_" + temp).onclick = () => deleteReference(keyword, temp);           
         }
     } else {
-        divEle1.innerHTML += '<div id="' + keyword + '_add_ref_form"  class="ext_display_none"><input type="text" name="keyword" value="' + keyword.toLowerCase() + '"  class="ext_display_none"><input type="text" placeholder="url" name="url"><input type="text" placeholder="description" name="description"><button id="ext_addRefButton">Add</button>';
+        divEle1.innerHTML += '<div id="' + keyword + '_add_ref_form" class="ext_display_none"><input type="text" name="keyword" value="' + keyword.toLowerCase() + '" class="ext_display_none"><input id="' + keyword +'_add_ref_desc_input" type="text" placeholder="description" name="description"><input id="' + keyword + '_add_ref_url_input" type="text" placeholder="url" name="url"><span id="' + keyword + '_cancel_add_ref_button" class="glyphicon glyphicon-remove ext_cancel_add_ref_button"></span><span id="' + keyword + '_add_ref_button" class="glyphicon glyphicon-ok ext_add_ref_button"></span>';
         divEle1.innerHTML += '<br>'
         tooltip.appendChild(divEle1);
     }
 
-    document.getElementById(keyword + "_add_ref_form").onclick = addReference;
+    document.getElementById(keyword + "_add_ref_button").onclick = () => addReference(keyword);
+    document.getElementById(keyword + "_cancel_add_ref_button").onclick = () => hideAddRefForm(keyword);   
 }
 
-async function addReference() {
-    let div = document.getElementById("ext_addReference");
-    let inputs = div.getElementsByTagName("input");
+async function addReference(keyword) {
+    let url = document.getElementById(keyword + "_add_ref_url_input");
+    let description = document.getElementById(keyword + "_add_ref_desc_input");
     let payload = {};
-    payload.keyword = inputs[0].value;
-    payload.url = inputs[1].value;
-    payload.description = inputs[2].value;
-    console.log(inputs[1].getAttributeNode("value"))
+    payload.keyword = keyword.toLowerCase();
+    payload.url = url.value;
+    payload.description = description.value;
     await fetch("http://localhost:3456/reference/add", { method: "post", body: JSON.stringify(payload), ...options }).catch(err=>console.log(err));
-    refreshTooltip(payload.keyword);
+    refreshTooltip(keyword);
+}
+
+function showAddRefForm(keyword) {
+    let addRefForm = document.getElementById(keyword + "_add_ref_form");
+    let showAddRefFormButton = document.getElementById(keyword + "_show_add_ref_form_button");
+    
+    if (addRefForm && addRefForm.classList.contains(["ext_display_none"])) {
+        addRefForm.classList.remove(["ext_display_none"]);
+    } else {return;}
+
+    if (showAddRefFormButton && !showAddRefFormButton.classList.contains(["ext_display_none"])) {
+        showAddRefFormButton.classList.add(["ext_display_none"]);
+    }
+}
+
+function hideAddRefForm(keyword) {
+    let addRefForm = document.getElementById(keyword + "_add_ref_form");
+    let showAddRefFormButton = document.getElementById(keyword + "_show_add_ref_form_button");
+
+    if (addRefForm && !addRefForm.classList.contains(["ext_display_none"])) {
+        addRefForm.classList.add(["ext_display_none"]);
+    } else {return;}
+
+    if (showAddRefFormButton && showAddRefFormButton.classList.contains(["ext_display_none"])) {
+        showAddRefFormButton.classList.remove(["ext_display_none"]);
+    }
 }
 
 async function editReference(keyword, index) {
@@ -213,5 +233,5 @@ function createTooltip() {
     return tooltip;
 }
 
-document.head.innerHTML += '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>';
+document.head.innerHTML = '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>' + document.head.innerHTML;
 addOnSelect();
