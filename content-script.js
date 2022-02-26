@@ -84,43 +84,57 @@ function addLinksToTooltip(tooltip, keywordData, keyword) {
     let divEle1 = document.createElement('div');
     let divEle2 = document.createElement('div');
     let h2 = document.createElement("h2");
-    h2.innerText = "Q & A";
+    h2.innerHTML = `Q & A <span id="${keyword}_show_add_qa_form_button" class="glyphicon glyphicon-plus ext_show_add_qa_form_button"></span>`;
     divEle2.appendChild(h2);
     if (keywordData) {
         let referencelist = keywordData.referencelist;
         let qalist = keywordData.questionAnswer;
-        divEle1.innerHTML += '<div id="' + keyword + '_add_ref_form" class="ext_display_none"><input type="text" name="keyword" value="' + keywordData.keyword.toLowerCase() + '" class="ext_display_none"><input id="' + keyword +'_add_ref_desc_input" type="text" placeholder="description" name="description"><input id="' + keyword + '_add_ref_url_input" type="text" placeholder="url" name="url"><span id="' + keyword + '_cancel_add_ref_button" class="glyphicon glyphicon-remove ext_cancel_add_ref_button"></span><span id="' + keyword + '_add_ref_button" class="glyphicon glyphicon-ok ext_add_ref_button"></span>';
+        divEle1.innerHTML += `<div id="${keyword}_add_ref_form" class="ext_display_none"><input type="text" name="keyword" value="${keywordData.keyword.toLowerCase()}" class="ext_display_none"><input id="${keyword}_add_ref_desc_input" type="text" placeholder="description" name="description"><input id="${keyword}_add_ref_url_input" type="text" placeholder="url" name="url"><span id="${keyword}_cancel_add_ref_button" class="glyphicon glyphicon-remove ext_cancel_add_ref_button"></span><span id="${keyword}_add_ref_button" class="glyphicon glyphicon-ok ext_add_ref_button"></span>`;
         divEle1.innerHTML += '<br>'
         for (let temp=0;referencelist && temp<referencelist.length;temp++) {
-            let divEle1html = '<div  id="' + keyword + '_ref_refId_' + temp + '" class="ext_display_none">' + referencelist[temp]._id + '</div><div id="' + keyword + '_ref_item_' + temp + '">' + referencelist[temp].description + ': <a href="' + referencelist[temp].url + '">' + referencelist[temp].url + '</a><span id="' + keyword + '_ref_delete_button_' + temp + '" class="glyphicon glyphicon-remove-circle ext_delete_button"></span><span id="' + keyword + '_ref_edit_button_' + temp + '" class="glyphicon glyphicon-pencil ext_edit_button"></span></div><br>';
-            divEle1html +=  '<div id="' + keyword + '_ref_edit_form_' + temp + '" class="ext_display_none"><input  id="' + keyword + '_ref_refId_input_' + temp + '" type="text" name="refId" value="' + referencelist[temp]._id + '" class="ext_display_none"><input  type="text" name="keyword" value="' + keyword.toLowerCase() + '" class="ext_display_none"><input id="' + keyword + '_ref_des_input_' + temp + '" type="text" placeholder="description" name="description"><input id="' + keyword + '_ref_url_input_' + temp + '" type="text" placeholder="url" name="url"><span id="' + keyword + '_ref_edit_cancel_button_' + temp + '" class="glyphicon glyphicon-remove ext_edit_cancel"></span><span id="' + keyword + '_ref_edit_submit_button_' + temp + '" class="glyphicon glyphicon-ok ext_edit_submit"></span><br>'
+            let divEle1html = `<div id="${keyword}_ref_item_${temp}"><div  id="${keyword}_ref_refId_${temp}" class="ext_display_none">${referencelist[temp]._id}</div>${referencelist[temp].description}: <a target="_blank" href="//${referencelist[temp].url}">${referencelist[temp].url}</a><span id="${keyword}_ref_delete_button_${temp}" class="glyphicon glyphicon-remove-circle ext_delete_button"></span><span id="${keyword}_ref_edit_button_${temp}" class="glyphicon glyphicon-pencil ext_edit_button"></span></div><br>`;
+            divEle1html +=  `<div id="${keyword}_ref_edit_form_${temp}" class="ext_display_none"><input  id="${keyword}_ref_refId_input_${temp}" type="text" name="refId" value="${referencelist[temp]._id}" class="ext_display_none"><input  type="text" name="keyword" value="${keyword.toLowerCase()}" class="ext_display_none"><input id="${keyword}_ref_des_input_${temp}" type="text" placeholder="description" name="description"><input id="${keyword}_ref_url_input_${temp}" type="text" placeholder="url" name="url"><span id="${keyword}_ref_edit_cancel_button_${temp}" class="glyphicon glyphicon-remove ext_edit_cancel"></span><span id="${keyword}_ref_edit_submit_button_${temp}" class="glyphicon glyphicon-ok ext_edit_submit"></span><br>`;
             divEle1.innerHTML += divEle1html;                           
         }
+        divEle2.innerHTML += `<div id="${keyword}_add_qa_form" class="ext_display_none"><input type="text" name="keyword" value="${keywordData.keyword.toLowerCase()}" class="ext_display_none"><input id="${keyword}_add_qa_question_input" type="text" placeholder="question" name="question"><input id="${keyword}_add_qa_answer_input" type="text" placeholder="answer" name="answer"><span id="${keyword}_cancel_add_qa_button" class="glyphicon glyphicon-remove ext_cancel_add_qa_button"></span><span id="${keyword}_add_qa_button" class="glyphicon glyphicon-ok ext_add_qa_button"></span>`;
+        divEle2.innerHTML += '<br>';
         for (var temp=0;qalist && temp<qalist.length;temp++) {
-            let divEle2html = '<div>' + qalist[temp].question + '</div><div>' + qalist[temp].answer + '</div><br>';
+            let divEle2html = `<div id="${keyword}_qa_item_${temp}"><div  id="${keyword}_qa_qaId_${temp}" class="ext_display_none">${qalist[temp]._id}</div><div>${qalist[temp].question}</div><div>${qalist[temp].answer}</div><span id="${keyword}_qa_delete_button_${temp}" class="glyphicon glyphicon-remove-circle ext_delete_button"></span><span id="${keyword}_qa_edit_button_${temp}" class="glyphicon glyphicon-pencil ext_edit_button"></span></div><br>`;
+            divEle2html += `<div id="${keyword}_qa_edit_form_${temp}" class="ext_display_none"><input id="${keyword}_qa_qaId_input_${temp}" value="${qalist[temp]._id}" class="ext_display_none"></input><input id="${keyword}_qa_question_input_${temp}"></input><input id="${keyword}_qa_answer_input_${temp}"></input><span id="${keyword}_qa_edit_cancel_button_${temp}" class="glyphicon glyphicon-remove ext_edit_cancel"></span><span id="${keyword}_qa_edit_submit_button_${temp}" class="glyphicon glyphicon-ok ext_edit_submit"></span></div><br>`;
             divEle2.innerHTML += divEle2html;
         }
         tooltip.appendChild(divEle1);
         tooltip.appendChild(divEle2);
         for (let temp=0;referencelist && temp<referencelist.length;temp++) {
-            document.getElementById(keyword + "_ref_edit_button_" + temp).onclick = () =>  openEditForm(keyword, temp, referencelist[temp]);
-            document.getElementById(keyword + "_ref_edit_cancel_button_" + temp).onclick = () => hideEditForm(keyword, temp);
-            document.getElementById(keyword + "_ref_edit_submit_button_" + temp).onclick = () => editReference(keyword, temp);
-            document.getElementById(keyword + "_ref_delete_button_" + temp).onclick = () => deleteReference(keyword, temp);           
+            document.getElementById(`${keyword}_ref_edit_button_${temp}`).onclick = () =>  openRefEditForm(keyword, temp, referencelist[temp]);
+            document.getElementById(`${keyword}_ref_edit_cancel_button_${temp}`).onclick = () => hideRefEditForm(keyword, temp);
+            document.getElementById(`${keyword}_ref_edit_submit_button_${temp}`).onclick = () => editReference(keyword, temp);
+            document.getElementById(`${keyword}_ref_delete_button_${temp}`).onclick = () => deleteReference(keyword, temp);           
+        }
+
+        for (let temp=0;qalist && temp<qalist.length;temp++) {            
+            document.getElementById(`${keyword}_qa_edit_button_${temp}`).onclick = () =>  openQaEditForm(keyword, temp, qalist[temp]);
+            document.getElementById(`${keyword}_qa_edit_cancel_button_${temp}`).onclick = () => hideQaEditForm(keyword, temp);
+            document.getElementById(`${keyword}_qa_edit_submit_button_${temp}`).onclick = () => editQa(keyword, temp);
+            document.getElementById(`${keyword}_qa_delete_button_${temp}`).onclick = () => deleteQa(keyword, temp);
         }
     } else {
-        divEle1.innerHTML += '<div id="' + keyword + '_add_ref_form" class="ext_display_none"><input type="text" name="keyword" value="' + keyword.toLowerCase() + '" class="ext_display_none"><input id="' + keyword +'_add_ref_desc_input" type="text" placeholder="description" name="description"><input id="' + keyword + '_add_ref_url_input" type="text" placeholder="url" name="url"><span id="' + keyword + '_cancel_add_ref_button" class="glyphicon glyphicon-remove ext_cancel_add_ref_button"></span><span id="' + keyword + '_add_ref_button" class="glyphicon glyphicon-ok ext_add_ref_button"></span>';
+        divEle1.innerHTML += `<div id="${keyword}_add_ref_form" class="ext_display_none"><input type="text" name="keyword" value="${keyword.toLowerCase()}" class="ext_display_none"><input id="${keyword}_add_ref_desc_input" type="text" placeholder="description" name="description"><input id="${keyword}_add_ref_url_input" type="text" placeholder="url" name="url"><span id="${keyword}_cancel_add_ref_button" class="glyphicon glyphicon-remove ext_cancel_add_ref_button"></span><span id="${keyword}_add_ref_button" class="glyphicon glyphicon-ok ext_add_ref_button"></span>`;
         divEle1.innerHTML += '<br>'
         tooltip.appendChild(divEle1);
     }
 
-    document.getElementById(keyword + "_add_ref_button").onclick = () => addReference(keyword);
-    document.getElementById(keyword + "_cancel_add_ref_button").onclick = () => hideAddRefForm(keyword);   
+    document.getElementById(`${keyword}_add_ref_button`).onclick = () => addReference(keyword);
+    document.getElementById(`${keyword}_cancel_add_ref_button`).onclick = () => hideAddRefForm(keyword);
+
+    document.getElementById(`${keyword}_show_add_qa_form_button`).onclick = () => showAddQaForm(keyword);
+    document.getElementById(`${keyword}_add_qa_button`).onclick = () => addQa(keyword);
+    document.getElementById(`${keyword}_cancel_add_qa_button`).onclick = () => hideAddQaForm(keyword);   
 }
 
 async function addReference(keyword) {
-    let url = document.getElementById(keyword + "_add_ref_url_input");
-    let description = document.getElementById(keyword + "_add_ref_desc_input");
+    let url = document.getElementById(`${keyword}_add_ref_url_input`);
+    let description = document.getElementById(`${keyword}_add_ref_desc_input`);
     let payload = {};
     payload.keyword = keyword.toLowerCase();
     payload.url = url.value;
@@ -130,8 +144,8 @@ async function addReference(keyword) {
 }
 
 function showAddRefForm(keyword) {
-    let addRefForm = document.getElementById(keyword + "_add_ref_form");
-    let showAddRefFormButton = document.getElementById(keyword + "_show_add_ref_form_button");
+    let addRefForm = document.getElementById(`${keyword}_add_ref_form`);
+    let showAddRefFormButton = document.getElementById(`${keyword}_show_add_ref_form_button`);
     
     if (addRefForm && addRefForm.classList.contains(["ext_display_none"])) {
         addRefForm.classList.remove(["ext_display_none"]);
@@ -143,8 +157,8 @@ function showAddRefForm(keyword) {
 }
 
 function hideAddRefForm(keyword) {
-    let addRefForm = document.getElementById(keyword + "_add_ref_form");
-    let showAddRefFormButton = document.getElementById(keyword + "_show_add_ref_form_button");
+    let addRefForm = document.getElementById(`${keyword}_add_ref_form`);
+    let showAddRefFormButton = document.getElementById(`${keyword}_show_add_ref_form_button`);
 
     if (addRefForm && !addRefForm.classList.contains(["ext_display_none"])) {
         addRefForm.classList.add(["ext_display_none"]);
@@ -156,9 +170,9 @@ function hideAddRefForm(keyword) {
 }
 
 async function editReference(keyword, index) {
-    let editRefId = keyword + "_ref_refId_input_" + index;
-    let editDescId = keyword + "_ref_des_input_" + index;
-    let editUrlId = keyword + "_ref_url_input_" + index;
+    let editRefId = `${keyword}_ref_refId_input_${index}`;
+    let editDescId = `${keyword}_ref_des_input_${index}`;
+    let editUrlId = `${keyword}_ref_url_input_${index}`;
     
     let refId_input = document.getElementById(editRefId);
     let desc_input = document.getElementById(editDescId);
@@ -172,7 +186,7 @@ async function editReference(keyword, index) {
 }
 
 async function deleteReference(keyword, index) {
-    let refEleId = keyword + "_ref_refId_" + index;
+    let refEleId = `${keyword}_ref_refId_${index}`;
     let refIdDiv = document.getElementById(refEleId);
     let refId = refIdDiv.innerText;
     let payload = {keyword, refId};
@@ -180,9 +194,9 @@ async function deleteReference(keyword, index) {
     refreshTooltip(keyword);
 }
 
-function openEditForm(keyword, index, reference) {
-    let refEleId = keyword + "_ref_item_" + index;
-    let refEditId = keyword + "_ref_edit_form_" + index;
+function openRefEditForm(keyword, index, reference) {
+    let refEleId = `${keyword}_ref_item_${index}`;
+    let refEditId = `${keyword}_ref_edit_form_${index}`;
     let refItem = document.getElementById(refEleId);
     let editForm = document.getElementById(refEditId);
     if (editForm && editForm.classList.contains("ext_display_none")) {
@@ -191,8 +205,8 @@ function openEditForm(keyword, index, reference) {
     if (refItem && !refItem.classList.contains("ext_display_none")) {
         refItem.classList.add(["ext_display_none"]);
     }
-    let editDescId = keyword + "_ref_des_input_" + index;
-    let editUrlId = keyword + "_ref_url_input_" + index;
+    let editDescId = `${keyword}_ref_des_input_${index}`;
+    let editUrlId = `${keyword}_ref_url_input_${index}`;
     let desc_input = document.getElementById(editDescId);
     let url_input = document.getElementById(editUrlId);
     if (reference && reference.description)
@@ -202,9 +216,9 @@ function openEditForm(keyword, index, reference) {
     }
 }
 
-function hideEditForm(keyword, index) {
-    let refId = keyword + "_ref_item_" + index;
-    let refEditId = keyword + "_ref_edit_form_" + index;
+function hideRefEditForm(keyword, index) {
+    let refId = `${keyword}_ref_item_${index}`;
+    let refEditId = `${keyword}_ref_edit_form_${index}`;
     let refItem = document.getElementById(refId);
     let editForm = document.getElementById(refEditId);
     if (editForm && !editForm.classList.contains("ext_display_none")) {
@@ -216,6 +230,101 @@ function hideEditForm(keyword, index) {
 }
 
 
+
+
+async function addQa(keyword) {
+    let question = document.getElementById(`${keyword}_add_qa_question_input`);
+    let answer = document.getElementById(`${keyword}_add_qa_answer_input`);
+    let payload = {question: question.value, answer: answer.value, keyword: keyword.toLowerCase()};
+    await fetch("http://localhost:3456/questionanswer/add", { method: "post", body: JSON.stringify(payload), ...options }).catch(err=>console.log(err));
+    refreshTooltip(keyword);
+}
+
+function showAddQaForm(keyword) {
+    let addQaForm = document.getElementById(`${keyword}_add_qa_form`);
+    let showAddQaFormButton = document.getElementById(`${keyword}_show_add_qa_form_button`);
+    
+    if (addQaForm && addQaForm.classList.contains(["ext_display_none"])) {
+        addQaForm.classList.remove(["ext_display_none"]);
+    } else {return;}
+
+    if (showAddQaFormButton && !showAddQaFormButton.classList.contains(["ext_display_none"])) {
+        showAddQaFormButton.classList.add(["ext_display_none"]);
+    }
+}
+
+function hideAddQaForm(keyword) {
+    let addQaForm = document.getElementById(`${keyword}_add_qa_form`);
+    let showAddQaFormButton = document.getElementById(`${keyword}_show_add_qa_form_button`);
+
+    if (addQaForm && !addQaForm.classList.contains(["ext_display_none"])) {
+        addQaForm.classList.add(["ext_display_none"]);
+    } else {return;}
+
+    if (showAddQaFormButton && showAddQaFormButton.classList.contains(["ext_display_none"])) {
+        showAddQaFormButton.classList.remove(["ext_display_none"]);
+    }
+}
+
+async function editQa(keyword, index) {
+    let editQaId = `${keyword}_qa_qaId_input_${index}`;
+    let editQuestionId = `${keyword}_qa_question_input_${index}`;
+    let editAnswerId = `${keyword}_qa_answer_input_${index}`;
+    
+    let qaId_input = document.getElementById(editQaId);
+    let question_input = document.getElementById(editQuestionId);
+    let answer_input = document.getElementById(editAnswerId);
+    let qaId = qaId_input.value;
+    let question = question_input.value;
+    let answer = answer_input.value;
+    let payload = {question, answer, qaId, keyword};
+    await fetch("http://localhost:3456/questionanswer/update", { method: "post", body: JSON.stringify(payload), ...options }).catch(err=>console.log(err));
+    refreshTooltip(keyword);
+}
+
+async function deleteQa(keyword, index) {
+    let qaEleId = `${keyword}_qa_qaId_${index}`;
+    let qaIdDiv = document.getElementById(qaEleId);
+    let qaId = qaIdDiv.innerText;
+    let payload = {keyword, qaId};
+    await fetch("http://localhost:3456/questionanswer/remove", { method: "post", body: JSON.stringify(payload), ...options }).catch(err=>console.log(err));
+    refreshTooltip(keyword);
+}
+
+function openQaEditForm(keyword, index, qa) {
+    let qaEleId = `${keyword}_qa_item_${index}`;
+    let qaEditId = `${keyword}_qa_edit_form_${index}`;
+    let qaItem = document.getElementById(qaEleId);
+    let editForm = document.getElementById(qaEditId);
+    if (editForm && editForm.classList.contains("ext_display_none")) {
+        editForm.classList.remove(["ext_display_none"]);
+    }
+    if (qaItem && !qaItem.classList.contains("ext_display_none")) {
+        qaItem.classList.add(["ext_display_none"]);
+    }
+    let editQuestionId = `${keyword}_qa_question_input_${index}`;
+    let editAnswerId = `${keyword}_qa_answer_input_${index}`;
+    let question_input = document.getElementById(editQuestionId);
+    let answer_input = document.getElementById(editAnswerId);
+    if (qa && qa.question)
+        question_input.setAttribute("value", qa.question);
+    if (qa && qa.answer) {
+        answer_input.setAttribute("value", qa.answer);
+    }
+}
+
+function hideQaEditForm(keyword, index) {
+    let qaId = `${keyword}_qa_item_${index}`;
+    let qaEditId = `${keyword}_qa_edit_form_${index}`;
+    let qaItem = document.getElementById(qaId);
+    let editForm = document.getElementById(qaEditId);
+    if (editForm && !editForm.classList.contains("ext_display_none")) {
+        editForm.classList.add(["ext_display_none"]);
+    }
+    if (qaItem && qaItem.classList.contains("ext_display_none")) {
+        qaItem.classList.remove(["ext_display_none"]);
+    }
+}
 
 
 function createTooltip() {
