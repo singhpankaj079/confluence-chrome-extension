@@ -58,7 +58,7 @@ function actionOnSelect(event) {
 
 function updateTooltip(tooltip, selectedText, keywordData, pageX, pageY) {    
     let h2 = document.createElement("h2");
-    h2.innerHTML = selectedText + '<span id="' + selectedText + '_show_add_ref_form_button" title="Add reference" class="glyphicon glyphicon-plus ext_show_add_ref_form_button"></span>';
+    h2.innerHTML = selectedText;
     h2.style.textAlign = "center";
     h2.style.color = "purple";
     tooltip.innerText = "";
@@ -66,7 +66,6 @@ function updateTooltip(tooltip, selectedText, keywordData, pageX, pageY) {
     if (pageX) tooltip.style.left = pageX + "px";
     if (pageY) tooltip.style.top = pageY + "px";
     addLinksToTooltip(tooltip, keywordData, selectedText);
-    document.getElementById(selectedText + "_show_add_ref_form_button").onclick = () => showAddRefForm(selectedText);
     tooltip.style.display = "block";
     
 }
@@ -83,8 +82,9 @@ function refreshTooltip(keyword) {
 function addLinksToTooltip(tooltip, keywordData, keyword) {
     let divEle1 = document.createElement('div');
     let divEle2 = document.createElement('div');
+    divEle1.innerHTML += `<h2> References <span id="${keyword}_show_add_ref_form_button" title="Add reference" class="glyphicon glyphicon-plus ext_show_add_ref_form_button"></span></h2>`;
     let h2 = document.createElement("h2");
-    h2.innerHTML = `Q & A <span id="${keyword}_show_add_qa_form_button" class="glyphicon glyphicon-plus ext_show_add_qa_form_button"></span>`;
+    h2.innerHTML = `FAQs <span id="${keyword}_show_add_qa_form_button" class="glyphicon glyphicon-plus ext_show_add_qa_form_button"></span>`;
     divEle2.appendChild(h2);
     if (keywordData) {
         let referencelist = keywordData.referencelist;
@@ -122,8 +122,12 @@ function addLinksToTooltip(tooltip, keywordData, keyword) {
         divEle1.innerHTML += `<div id="${keyword}_add_ref_form" class="ext_display_none"><input type="text" name="keyword" value="${keyword.toLowerCase()}" class="ext_display_none"><input id="${keyword}_add_ref_desc_input" type="text" placeholder="description" name="description"><input id="${keyword}_add_ref_url_input" type="text" placeholder="url" name="url"><span id="${keyword}_cancel_add_ref_button" class="glyphicon glyphicon-remove ext_cancel_add_ref_button"></span><span id="${keyword}_add_ref_button" class="glyphicon glyphicon-ok ext_add_ref_button"></span>`;
         divEle1.innerHTML += '<br>'
         tooltip.appendChild(divEle1);
+        divEle2.innerHTML += `<div id="${keyword}_add_qa_form" class="ext_display_none"><input type="text" name="keyword" value="${keyword.toLowerCase()}" class="ext_display_none"><input id="${keyword}_add_qa_question_input" type="text" placeholder="question" name="question"><input id="${keyword}_add_qa_answer_input" type="text" placeholder="answer" name="answer"><span id="${keyword}_cancel_add_qa_button" class="glyphicon glyphicon-remove ext_cancel_add_qa_button"></span><span id="${keyword}_add_qa_button" class="glyphicon glyphicon-ok ext_add_qa_button"></span>`;
+        divEle2.innerHTML += '<br>';
+        tooltip.appendChild(divEle2);
     }
 
+    document.getElementById(`${keyword}_show_add_ref_form_button`).onclick = () => showAddRefForm(keyword);
     document.getElementById(`${keyword}_add_ref_button`).onclick = () => addReference(keyword);
     document.getElementById(`${keyword}_cancel_add_ref_button`).onclick = () => hideAddRefForm(keyword);
 
