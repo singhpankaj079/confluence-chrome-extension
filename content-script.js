@@ -66,7 +66,7 @@ function updateTooltip(tooltip, selectedText, keywordData, pageX, pageY) {
     if (pageX) tooltip.style.left = pageX + "px";
     if (pageY) tooltip.style.top = pageY + "px";
     addLinksToTooltip(tooltip, keywordData, selectedText);
-    tooltip.style.display = "block";
+    // tooltip.style.display = "block";
     
 }
 
@@ -334,8 +334,7 @@ function hideQaEditForm(keyword, index) {
 function createTooltip() {
     let tooltip = document.createElement('div');
     tooltip.id = tooltipId;
-    tooltip.style.display = "none";
-    tooltip.className = "animate__animated animate__lightSpeedInRight";
+    tooltip.className = "animate__animated animate__lightSpeedInRight ext_display_none";
     tooltip.onclick = function(e) {
         e.stopImmediatePropagation();
     }
@@ -348,3 +347,26 @@ function createTooltip() {
 
 document.head.innerHTML = '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>' + document.head.innerHTML;
 addOnSelect();
+function showTooltip() {
+    let tooltipEle = document.getElementById(tooltipId);
+    if (tooltipEle && tooltipEle.style) {
+        tooltipEle.style.display = "block";
+    }
+}
+
+function hideTooltip() {
+    let tooltipEle = document.getElementById(tooltipId);
+    if (tooltipEle && tooltipEle.style) {
+        tooltipEle.style.display = "none";
+    }
+}
+
+chrome.runtime.onMessage.addListener((message) => {
+    console.log(message);
+    switch(message.value) {
+        case "SHOW_TOOLTIP": showTooltip();
+        break;
+        case "HIDE_TOOLTIP": hideTooltip();
+        break;
+    }
+})
