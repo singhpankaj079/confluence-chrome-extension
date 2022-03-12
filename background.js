@@ -1,12 +1,10 @@
 chrome.runtime.onInstalled.addListener(() => {
-    
+    chrome.contextMenus.create({
+        "title": "References and FAQs",
+        id: "ext_show_ref_qa_id_1",
+        contexts: ["selection"]
+    })
 });
-
-chrome.contextMenus.create({
-    "title": "References and FAQs",
-    id: "ext_show_ref_qa_id_1",
-    contexts: ["selection"]
-})
 
 chrome.contextMenus.onClicked.addListener(function(info) {
     if (info.menuItemId && info.menuItemId === "ext_show_ref_qa_id_1") {
