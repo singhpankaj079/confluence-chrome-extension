@@ -32,13 +32,17 @@ function addOnSelect() {
         }
 
         if(window.getSelection().toString().length) {
-           let exactText = window.getSelection().toString();
+           let exactText = window.getSelection().toString().trim();
            fetchInfo(exactText)
-           .then(json => {updateTooltip(tooltip, exactText, json, event.pageX, event.pageY);}).catch(err=> {console.log(err);tooltip.style.display = "none"});
-        }  else {
-            tooltip.style.display = "none";
+           .then(json => {updateTooltip(tooltip, exactText, json, event.pageX, event.pageY);}).catch(err=> {console.log(err);});
         }
     });
+    document.addEventListener('click', () => {
+        let tooltip = document.getElementById(tooltipId);
+        if (tooltip && tooltip.style) {
+            tooltip.style.display = "none";
+        }
+    })
 }
 
 function actionOnSelect(event) {
@@ -76,7 +80,7 @@ function refreshTooltip(keyword) {
         tooltip = createTooltip();
     }
     fetchInfo(keyword)
-        .then(json => {updateTooltip(tooltip, keyword, json);}).catch(err=> {console.log(err);tooltip.style.display = "none"});
+        .then(json => {updateTooltip(tooltip, keyword, json);}).catch(err=> {console.log(err);});
 }
 
 function addLinksToTooltip(tooltip, keywordData, keyword) {
@@ -92,7 +96,11 @@ function addLinksToTooltip(tooltip, keywordData, keyword) {
         divEle1.innerHTML += `<div id="${keyword}_add_ref_form" class="ext_display_none"><input type="text" name="keyword" value="${keywordData.keyword.toLowerCase()}" class="ext_display_none"><input id="${keyword}_add_ref_desc_input" type="text" placeholder="description" name="description"><input id="${keyword}_add_ref_url_input" type="text" placeholder="url" name="url"><span id="${keyword}_cancel_add_ref_button" class="glyphicon glyphicon-remove ext_cancel_add_ref_button"></span><span id="${keyword}_add_ref_button" class="glyphicon glyphicon-ok ext_add_ref_button"></span>`;
         divEle1.innerHTML += '<br>'
         for (let temp=0;referencelist && temp<referencelist.length;temp++) {
-            let divEle1html = `<div id="${keyword}_ref_item_${temp}"><div  id="${keyword}_ref_refId_${temp}" class="ext_display_none">${referencelist[temp]._id}</div>${referencelist[temp].description}: <a target="_blank" href="//${referencelist[temp].url}">${referencelist[temp].url}</a><span id="${keyword}_ref_delete_button_${temp}" class="glyphicon glyphicon-remove-circle ext_delete_button"></span><span id="${keyword}_ref_edit_button_${temp}" class="glyphicon glyphicon-pencil ext_edit_button"></span></div><br>`;
+            let refUrl = referencelist[temp].url;
+            if (!refUrl.includes('http://') && !refUrl.includes('https://')) {
+                refUrl = `https://${refUrl}`;
+            }
+            let divEle1html = `<div id="${keyword}_ref_item_${temp}"><div  id="${keyword}_ref_refId_${temp}" class="ext_display_none">${referencelist[temp]._id}</div>${referencelist[temp].description}: <a target="_blank" href="${refUrl}">${referencelist[temp].url}</a><span id="${keyword}_ref_delete_button_${temp}" class="glyphicon glyphicon-remove-circle ext_delete_button"></span><span id="${keyword}_ref_edit_button_${temp}" class="glyphicon glyphicon-pencil ext_edit_button"></span></div><br>`;
             divEle1html +=  `<div id="${keyword}_ref_edit_form_${temp}" class="ext_display_none"><input  id="${keyword}_ref_refId_input_${temp}" type="text" name="refId" value="${referencelist[temp]._id}" class="ext_display_none"><input  type="text" name="keyword" value="${keyword.toLowerCase()}" class="ext_display_none"><input id="${keyword}_ref_des_input_${temp}" type="text" placeholder="description" name="description"><input id="${keyword}_ref_url_input_${temp}" type="text" placeholder="url" name="url"><span id="${keyword}_ref_edit_cancel_button_${temp}" class="glyphicon glyphicon-remove ext_edit_cancel"></span><span id="${keyword}_ref_edit_submit_button_${temp}" class="glyphicon glyphicon-ok ext_edit_submit"></span><br>`;
             divEle1.innerHTML += divEle1html;                           
         }
@@ -233,9 +241,6 @@ function hideRefEditForm(keyword, index) {
     }
 }
 
-
-
-
 async function addQa(keyword) {
     let question = document.getElementById(`${keyword}_add_qa_question_input`);
     let answer = document.getElementById(`${keyword}_add_qa_answer_input`);
@@ -342,6 +347,7 @@ function createTooltip() {
         e.stopImmediatePropagation();
     }
     document.body.appendChild(tooltip);
+    tooltip.style.display = "none";
     return tooltip;
 }
 
@@ -349,6 +355,7 @@ document.head.innerHTML = '<link rel="stylesheet" href="https://maxcdn.bootstrap
 addOnSelect();
 function showTooltip() {
     let tooltipEle = document.getElementById(tooltipId);
+    console.log("showtooltip: " + tooltipEle);
     if (tooltipEle && tooltipEle.style) {
         tooltipEle.style.display = "block";
     }
@@ -356,13 +363,13 @@ function showTooltip() {
 
 function hideTooltip() {
     let tooltipEle = document.getElementById(tooltipId);
+    console.log("hidetooltip: " + tooltipEle);
     if (tooltipEle && tooltipEle.style) {
         tooltipEle.style.display = "none";
     }
 }
 
 chrome.runtime.onMessage.addListener((message) => {
-    console.log(message);
     switch(message.value) {
         case "SHOW_TOOLTIP": showTooltip();
         break;
